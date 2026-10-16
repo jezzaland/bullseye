@@ -15,6 +15,7 @@ td {
 <script>
 const songs = ["Headlights", "Black Swans", "Dust U Off", "Icarus", "Villain of Your Story", "24/7", "Fluorescent", "Moon", "Gemini", "Pretender"]
 const scores = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+const appearances = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 let A;
 let B;
@@ -36,8 +37,8 @@ const tabla = document.getElementById("tabel");
 	const cell = document.createElement("td")	
 	const cell2 = document.createElement("td")
 	const cell3 = document.createElement("td")				
-	cell.textContent=songs[i];
-	cell2.textContent=scores[i];
+	cell.textContent=i+1;
+	cell2.textContent=songs[i];
 	cell3.textContent="0.0%"
 	row.appendChild(cell);
 	row.appendChild(cell2);		
@@ -55,8 +56,8 @@ function sort() {
 		rows=table.rows;
 		for (i = 0; i < (rows.length-1); i++){
 		should=false;
-		let x = Number(rows[i].getElementsByTagName("TD")[1].textContent);
-		let y = Number(rows[i+1].getElementsByTagName("TD")[1].textContent);
+		let x = parseFloat(rows[i].getElementsByTagName("TD")[2].textContent);
+		let y = parseFloat(rows[i+1].getElementsByTagName("TD")[2].textContent);
 		if (x<y){
 			should=true;
 			break}
@@ -66,23 +67,27 @@ function sort() {
 			switching=true;
 			}
 		}
+	for (let j = 0; j < rows.length; j++) {
+		rows[j].getElementsByTagName("TD")[0].textContent = j + 1;
+	}
 	}
 		
 
 function adda() {
 	scores[A]+=1
+	appearances[A]+=1
+	appearances[B]+=1
 	const tabla = document.getElementById("tabel");
 	const rows = tabla.rows;
 	for (let i = 0; i < songs.length; i++){
-		let snc = rows[i].getElementsByTagName("TD")[0].textContent;
+		let snc = rows[i].getElementsByTagName("TD")[1].textContent;
 		if(snc===songs[A]){
-		rows[i].getElementsByTagName("TD")[1].textContent = scores[A];}}
+		rows[i].getElementsByTagName("TD")[2].textContent = scores[A];}}
 	
-	let total = scores.reduce((sum, current) => sum + current, 0);
 	for (let i = 0; i < rows.length; i++){
-		let song = rows[i].getElementsByTagName("TD")[0].textContent;
+		let song = rows[i].getElementsByTagName("TD")[1].textContent;
 		let index=songs.indexOf(song)
-		let percentage = total === 0 ? 0 : (scores[index] / total * 100);
+		let percentage = appearances[index] === 0 ? 0 : (scores[index] / appearances[index] * 100);
         rows[i].getElementsByTagName("td")[2].textContent = percentage.toFixed(1) + "%";}
 		
 	gen();
@@ -90,19 +95,21 @@ function adda() {
 }
 function addb() {
 	scores[B]+=1
+	appearances[A]+=1
+	appearances[B]+=1
 	const tabla = document.getElementById("tabel");
 	const rows = tabla.rows;
 	for (let i = 0; i < songs.length; i++){
-		let snc = rows[i].getElementsByTagName("TD")[0].textContent;
+		let snc = rows[i].getElementsByTagName("TD")[1].textContent;
 		if(snc===songs[B]){
-		rows[i].getElementsByTagName("TD")[1].textContent = scores[B];}}
-		
-	let total = scores.reduce((sum, current) => sum + current, 0);
+		rows[i].getElementsByTagName("TD")[2].textContent = scores[B];}}
+	
 	for (let i = 0; i < rows.length; i++){
-		let song = rows[i].getElementsByTagName("TD")[0].textContent;
+		let song = rows[i].getElementsByTagName("TD")[1].textContent;
 		let index=songs.indexOf(song)
-		let percentage = total === 0 ? 0 : (scores[index] / total * 100);
+		let percentage = appearances[index] === 0 ? 0 : (scores[index] / appearances[index] * 100);
         rows[i].getElementsByTagName("td")[2].textContent = percentage.toFixed(1) + "%";}
+		
 
 	gen();
 	sort();
