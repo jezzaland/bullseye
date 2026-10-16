@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<style>
+h1{font-size:50px;color:#D3E1EC;font-family:arial;}
+button{font-size:50px;background-color:#4F737F;color:#D3E1EC;font-family:arial;}
+p{font-size:30px;color:white;font-family:arial;color:#D3E1EC;}
+table{font-size:20px;color:white;font-family:arial;}
+tr:nth-child(even){
+	background-color:#4F737F;color:white;font-family:arial;}
+td {
+ padding:10px;}
+</style>
+<body onload="gen();table()" style="background-color:black;">
+<h1>RANK BULLSEYE</h1>
+<script>
+const songs = ["Headlights", "Black Swans", "Dust U Off", "Icarus", "Villain of Your Story", "24/7", "Fluorescent", "Moon", "Gemini", "Pretender"]
+const scores = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+let A;
+let B;
+
+function gen() {
+	A = Math.floor(Math.random() * 10);
+	document.getElementById("butt1").innerText = songs[A];
+	B = Math.floor(Math.random() * 10);
+	while (B == A) {
+		B = Math.floor(Math.random() * 10);
+	}
+	document.getElementById("butt2").innerText = songs[B];
+}
+
+function table() {
+const tabla = document.getElementById("tabel");
+	for (let i = 0; i < songs.length; i++){
+	const row = document.createElement("tr")				
+	const cell = document.createElement("td")	
+	const cell2 = document.createElement("td")
+	const cell3 = document.createElement("td")				
+	cell.textContent=songs[i];
+	cell2.textContent=scores[i];
+	cell3.textContent="0.0%"
+	row.appendChild(cell);
+	row.appendChild(cell2);		
+	row.appendChild(cell3);				
+	tabla.appendChild(row)				
+					}
+}
+
+function sort() {
+	var table,rows,i;
+	table=document.getElementById("tabel");
+	switching = true
+	while(switching){
+		switching=false;
+		rows=table.rows;
+		for (i = 0; i < (rows.length-1); i++){
+		should=false;
+		let x = Number(rows[i].getElementsByTagName("TD")[1].textContent);
+		let y = Number(rows[i+1].getElementsByTagName("TD")[1].textContent);
+		if (x<y){
+			should=true;
+			break}
+		}
+		if (should){
+			rows[i].parentNode.insertBefore(rows[i+1],rows[i]);
+			switching=true;
+			}
+		}
+	}
+		
+
+function adda() {
+	scores[A]+=1
+	const tabla = document.getElementById("tabel");
+	const rows = tabla.rows;
+	for (let i = 0; i < songs.length; i++){
+		let snc = rows[i].getElementsByTagName("TD")[0].textContent;
+		if(snc===songs[A]){
+		rows[i].getElementsByTagName("TD")[1].textContent = scores[A];}}
+	
+	let total = scores.reduce((sum, current) => sum + current, 0);
+	for (let i = 0; i < rows.length; i++){
+		let song = rows[i].getElementsByTagName("TD")[0].textContent;
+		let index=songs.indexOf(song)
+		let percentage = total === 0 ? 0 : (scores[index] / total * 100);
+        rows[i].getElementsByTagName("td")[2].textContent = percentage.toFixed(1) + "%";}
+		
+	gen();
+	sort();
+}
+function addb() {
+	scores[B]+=1
+	const tabla = document.getElementById("tabel");
+	const rows = tabla.rows;
+	for (let i = 0; i < songs.length; i++){
+		let snc = rows[i].getElementsByTagName("TD")[0].textContent;
+		if(snc===songs[B]){
+		rows[i].getElementsByTagName("TD")[1].textContent = scores[B];}}
+		
+	let total = scores.reduce((sum, current) => sum + current, 0);
+	for (let i = 0; i < rows.length; i++){
+		let song = rows[i].getElementsByTagName("TD")[0].textContent;
+		let index=songs.indexOf(song)
+		let percentage = total === 0 ? 0 : (scores[index] / total * 100);
+        rows[i].getElementsByTagName("td")[2].textContent = percentage.toFixed(1) + "%";}
+
+	gen();
+	sort();
+}
+
+</script>
+<p>Which is your fav?</p>
+<button onclick="adda()" type="button" id="butt1"></button>
+<br>
+<button onclick="addb()" type="button" id="butt2"></button>
+<br>
+<br>
+<table id="tabel" border="5"></table>
+</body>
+</html>
